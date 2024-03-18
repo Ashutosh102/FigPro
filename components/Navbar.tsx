@@ -15,10 +15,24 @@ const Navbar = ({ activeElement, imageInputRef, handleImageUpload, handleActiveE
   const isActive = (value: string | Array<ActiveElement>) =>
     (activeElement && activeElement.value === value) ||
     (Array.isArray(value) && value.some((val) => val?.value === activeElement?.value));
+  
+    const isMobileDevice = () => {
+      // Check if window is defined (for server-side rendering)
+      if (typeof window !== 'undefined') {
+        // Get the screen width
+        const screenWidth = window.innerWidth;
+        // Define the width for mobile devices
+        const mobileWidth = 768; // Adjust as needed
+        // Return true if the screen width is less than the mobile width
+        return screenWidth < mobileWidth;
+      }
+      // Return false by default
+      return false;
+    };
 
   return (
     <nav className="flex select-none items-center justify-between gap-4 bg-primary-black px-5 text-white">
-      <Image src="/assets/logo.svg" alt="FigPro Logo" width={58} height={20} />
+      <Image src="/assets/logo.png" alt="FigPro Logo" width={128} height={50} />
 
       <ul className="flex flex-row">
         {navElements.map((item: ActiveElement | any) => (
@@ -28,7 +42,7 @@ const Navbar = ({ activeElement, imageInputRef, handleImageUpload, handleActiveE
               if (Array.isArray(item.value)) return;
               handleActiveElement(item);
             }}
-            className={`group px-2.5 py-5 flex justify-center items-center
+            className={`group px-${isMobileDevice() ? '0.5' : '2.5'} py-5 flex justify-center items-center
             ${isActive(item.value) ? "bg-primary-green" : "hover:bg-primary-grey-200"}
             `}
           >
